@@ -11,10 +11,9 @@ import {UserController, PostController, CommentController} from './controllers/i
 mongoose.set("strictQuery", true);
 mongoose
     .connect('mongodb+srv://admin:admin@cluster0.zukeyqg.mongodb.net/blog?retryWrites=true&w=majority')
-    .then(()=> console.log('DB ok'))
+    .then(()=> {console.log('DB ok');
+    app.emit("base_started")})
     .catch((err)=> console.log('DB error',err));
-
-const app = express();
 
 const storage = multer.diskStorage( {
     destination: (_,__,cb)=> {
@@ -27,9 +26,13 @@ const storage = multer.diskStorage( {
 
 const upload = multer({storage});
 
+export const app = express();
+
 app.use(express.json());
 app.use(cors());
 app.use('/uploads',express.static('uploads'));
+
+app.get('/',PostController.hello);
 
 app.post('/auth/login', loginValidation, handleValidationErrors,  UserController.login);
 app.post('/auth/register', registerValidation, handleValidationErrors,  UserController.register);
@@ -67,3 +70,5 @@ app.listen(4444, (err) => {
 
     console.log('Server OK');
 });
+
+export default app;

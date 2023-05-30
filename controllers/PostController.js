@@ -1,6 +1,18 @@
 import PostModel from '../models/Post.js';
 import Comments from '../models/Comments.js';
 
+export const hello = async (req,res) => {
+  try {
+    return res.status(200).json({
+      status: 'work'
+    })
+  } catch {
+    res.status(500).json({
+      status: 'SOMETHING WENT WRONG'
+    })
+  }
+}
+
 export const getOne = async (req, res) => {
   try {
     const postId = req.params.id;
